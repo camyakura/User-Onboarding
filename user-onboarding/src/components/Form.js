@@ -16,13 +16,19 @@ function Form (props) {
     }
 
     const onChange = evt => {
-        const {name, value} = evt.target
-        change(name, value)
+        const {name, value, checked, type} = evt.target
+        const newValue = type === 'checkbox' ? checked : value;
+        change(name, newValue)
     }
     
     return (
-        <form>
-            <div>
+        <div>
+            <h1>Character Form</h1>
+            <p>{errors.name}</p>
+            <p>{errors.password}</p>
+            <p>{errors.email}</p>
+            <p>{errors.tos}</p>
+            <form onSubmit={onSubmit}>
                 <label>First Name
                     <input 
                         type='text'
@@ -50,14 +56,14 @@ function Form (props) {
                 <label>Terms of Service
                     <input 
                         type='checkbox'
-                        name='termsOfService'
-                        checked={values.terms}
+                        name='tos'
+                        checked={values.tos}
                         onChange={onChange}
                     /> 
                 </label>
-            <button >submit</button>
-            </div>
-        </form>
+            <input disabled={disabled} type='submit' value='Create a Character'/>
+            </form>
+        </div>
     )
 }
 

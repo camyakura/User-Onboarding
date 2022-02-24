@@ -14,14 +14,14 @@ const initialValues = {
   name: '',
   email: '',
   password: '',
-  termsOfService: false
+  tos: false
 }
 
 const initialErrors = {
   name:'',
   email: '',
   password: '',
-  termOfService: false
+  tos: ''
 }
 
 function App() {
@@ -31,22 +31,14 @@ function App() {
   const [formErrors, setFormErrors] = useState(initialErrors)
   const [disabled, setDisabled] = useState(true)
 
-  const getCharacters = () => {
-    axios.get('https://reqres.in/api/users')
-      .then(res => {
-        setCharacters(res.data.data)
-      })
-      .catch(err => console.log(err))
-  }
-
   const postNewCharacter = newCharacters => {
     axios.post('https://reqres.in/api/users', newCharacters)
       .then(res => {
-        console.log(res)
-        setCharacters([res.data.data,...characters])
+        setCharacters([res.data,...characters])
         setFormErrors(initialErrors)
       })
       .catch(err => console.log(err))
+      .finally(() => setFormValues(initialValues))
   }
 
   const validate = (name, value) => {
@@ -58,10 +50,7 @@ function App() {
 
   const inputChange = (name, value) => {
     validate(name, value)
-    setFormValues({
-      ...formValues,
-      [name]: value
-    })
+    setFormValues({...formValues,[name]: value})
   }
 
   const formSubmit = () => {
@@ -69,14 +58,10 @@ function App() {
       name: formValues.name.trim(),
       email:formValues.email.trim(),
       password:formValues.password,
-      // termsOfService: formValues
+      tos: formValues
     }
     postNewCharacter(newCharacter)
   }
-
-  useEffect(() => {
-    getCharacters()
-  }, [])
 
 
   useEffect(() => {
@@ -91,7 +76,7 @@ function App() {
         values={formValues}
         change={inputChange}
         submit={formSubmit}
-        // disabled={disabled}
+        disabled={disabled}
         errors={formErrors}
       />
 
